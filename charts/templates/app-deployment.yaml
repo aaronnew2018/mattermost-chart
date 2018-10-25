@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+      - env:
+        - name: MM_CONFIG
+          value: /mattermost/config/config.json
+        - name: MM_DBNAME
+          value: mattermost
+        - name: MM_PASSWORD
+          value: mmuser_password
+        - name: MM_USERNAME
+          value: mmuser
+        image: app
+        name: app
+        resources: {}
+        volumeMounts:
+        - mountPath: /mattermost/config
+          name: app-claim0
+        - mountPath: /mattermost/data
+          name: app-claim1
+        - mountPath: /mattermost/logs
+          name: app-claim2
+        - mountPath: /mattermost/plugins
+          name: app-claim3
+        - mountPath: /etc/localtime
+          name: app-claim4
+          readOnly: true
+      volumes:
+      - name: app-claim0
+        persistentVolumeClaim:
+          claimName: app-claim0
+      - name: app-claim1
+        persistentVolumeClaim:
+          claimName: app-claim1
+      - name: app-claim2
+        persistentVolumeClaim:
+          claimName: app-claim2
+      - name: app-claim3
+        persistentVolumeClaim:
+          claimName: app-claim3
+      - name: app-claim4
+        persistentVolumeClaim:
+          claimName: app-claim4
+          readOnly: true
+status: {}
