@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: db
+  name: db
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: db
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: mattermost
+        - name: POSTGRES_PASSWORD
+          value: mmuser_password
+        - name: POSTGRES_USER
+          value: mmuser
+        image: db
+        name: db
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: db-claim0
+        - mountPath: /etc/localtime
+          name: db-claim1
+          readOnly: true
+      volumes:
+      - name: db-claim0
+        persistentVolumeClaim:
+          claimName: db-claim0
+      - name: db-claim1
+        persistentVolumeClaim:
+          claimName: db-claim1
+          readOnly: true
+status: {}
